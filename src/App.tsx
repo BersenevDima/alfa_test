@@ -6,7 +6,7 @@ import ProductPage from "./pages/ProductPage";
 import Header from "./components/Header/Header";
 
 const App: React.FC = () => (
-  <BrowserRouter>
+  <BrowserRouter basename="/alfa_test">
     <Header />
     <Routes>
       <Route path="/" element={<Navigate to="/products" />} />
