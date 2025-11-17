@@ -1,29 +1,31 @@
-import { v4 as uuidv4 } from "uuid";
 import type { Product } from "../types/product";
-
-const API_KEY = "54b8c44e90e239b302f584cda6733f65";
 
 export const fetchProductsAPI = async (): Promise<Product[]> => {
   try {
-    const res = await fetch(
-      `https://gnews.io/api/v4/search?q=dota&lang=ru&max=10&apikey=${API_KEY}`
-    );
+    const res = await fetch("https://rickandmortyapi.com/api/character/?page=19");
 
-    if (!res.ok) throw new Error("Не удалось загрузить новости");
+    if (!res.ok) throw new Error("Ошибка загрузки персонажей");
 
     const data = await res.json();
 
-    return data.articles
-      .filter((a: any) => a.title && a.description && a.image)
-      .map((a: any) => ({
-        id: uuidv4(),
-        title: a.title,
-        description: a.description,
-        image: a.image,
+    return data.results.map((char: any) => {
+      const episodeCount = char.episode?.length ?? 0;
+
+      return {
+        id: char.id.toString(),
+        title: char.name,
+        description: [
+          `${char.status} • ${char.species}${char.type ? ` (${char.type})` : ""} • ${char.gender}`,
+          `Происхождение: ${char.origin?.name || "Неизвестно"}`,
+          `Локация: ${char.location?.name || "Неизвестно"}`,
+          `Эпизодов: ${episodeCount}`
+        ].join("\n"),
+        image: char.image,
         liked: false,
-      }));
-  } catch (error) {
-    console.error("Ошибка загрузки новостей:", error);
+      };
+    });
+  } catch (err) {
+    console.error("Ошибка загрузки персонажей:", err);
     return [];
   }
 };

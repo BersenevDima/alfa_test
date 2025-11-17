@@ -29,7 +29,7 @@ const ProductPage: React.FC = () => {
     return (
       <Container>
         <BackButton onClick={() => navigate("/products")}>← Назад</BackButton>
-        <p>Новость не найдена</p>
+        <p>Персонаж не найден</p>
       </Container>
     );
 
